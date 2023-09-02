@@ -19,7 +19,11 @@ local plugins = {
 
   {
     "neovim/nvim-lspconfig",
-    dependencies = { "jose-elias-alvarez/null-ls.nvim" },
+    dependencies = {
+      "jose-elias-alvarez/null-ls.nvim",
+      "williamboman/mason-lspconfig.nvim",
+      "williamboman/mason.nvim"
+    },
     config = function ()
       require "custom.configs.lspconfig"
     end,
@@ -175,6 +179,19 @@ local plugins = {
         { name = "path",     group_index = 2 },
       },
     },
+  },
+
+  {
+    "cuducos/yaml.nvim",
+    ft = {"yaml"},
+    config = function ()
+      require("yaml").setup()
+    end
+  },
+
+  {
+    "qiuxiang/solidity-ls",
+    ft = {"solidity"}
   },
 }
 return plugins
