@@ -18,6 +18,22 @@ local plugins = {
   },
 
   {
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
+      ensure_installed = {
+        "rust",
+      },
+      width = function(_, cols, _)
+      if cols > 200 then
+      return 170
+      else
+      return math.floor(cols * 0.87)
+        end
+      end,
+    }
+  },
+
+  {
     "neovim/nvim-lspconfig",
     dependencies = {
       "jose-elias-alvarez/null-ls.nvim",
@@ -79,14 +95,13 @@ local plugins = {
     ft = "move",
   },
 
-  {
-    "mfussenegger/nvim-dap",
-  },
-
-  {
-    "nvim-telescope/telescope-file-browser.nvim",
-    dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
-  },
+  -- {
+  --   "mfussenegger/nvim-dap",
+  -- },
+  -- {
+  --   "nvim-telescope/telescope-file-browser.nvim",
+  --   dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
+  -- },
 
   {
     "nvim-treesitter/nvim-treesitter",
@@ -117,15 +132,6 @@ local plugins = {
   },
 
   {
-    "junegunn/goyo.vim",
-    ft = "markdown",
-  },
-
-  {
-    'lervag/vimtex',
-  },
-
-  {
     'z0mbix/vim-shfmt',
     ft = 'sh',
     init = function ()
@@ -136,15 +142,12 @@ local plugins = {
   {
     "sql-formatter-org/sql-formatter",
     ft = "sql",
-    config = function (_, opts)
-      require('sql-fmt').setup(opts)
-    end
   },
 
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
-    event = "InsertEnter",
+    -- event = "InsertEnter",
     config = function()
       require("copilot").setup({})
     end,
@@ -157,7 +160,7 @@ local plugins = {
       "zbirenbaum/copilot.lua"
     },
     lazy = false,
-    opts = overrides,
+    opts = overrides.copilot,
     config = function()
       require("copilot_cmp").setup()
     end,
