@@ -6,10 +6,8 @@ local lint = null_ls.builtins.diagnostics
 local sources = {
   formatting.prettier,
   formatting.stylua,
-
   formatting.prettierd.with { filetypes = { "html", "markdown", "css", "typescript" } },
   formatting.deno_fmt,
-
   lint.shellcheck,
 }
 

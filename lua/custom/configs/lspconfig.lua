@@ -6,7 +6,7 @@ local util = require "lspconfig/util"
 lspconfig.tsserver.setup({
   on_attach = on_attach,
   capabilities = capabilities,
-  filetypes = {"typescript"},
+  filetypes = {"typescript, javascript"},
 })
 
 lspconfig.move_analyzer.setup({
@@ -16,7 +16,3 @@ lspconfig.move_analyzer.setup({
   root_dir = util.root_pattern("Move.toml"),
 })
 
--- lspconfig.navigator.setup({
---   on_attach = on_attach,
---   capabilities = capabilities,
--- })
