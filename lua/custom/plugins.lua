@@ -1,5 +1,3 @@
-local overrides = require "custom.configs.overrides"
-
 local plugins = {
   {
     "williamboman/mason.nvim",
@@ -8,7 +6,19 @@ local plugins = {
         "rust-analyzer",
         "move-analyzer",
         "tsserver",
-        "shfmt"
+        "shfmt",
+        "gopls",
+        "solidity-ls",
+        "eslint-lsp",
+        "shellcheck",
+        "sqls",
+        "stylua",
+        "prettierd",
+        "prettier",
+        "sql-formatter",
+        "yaml-language-server",
+        "eslint_d",
+        "js-debug-adapter",
       },
     },
   },
@@ -18,62 +28,54 @@ local plugins = {
   },
 
   {
-    "nvim-treesitter/nvim-treesitter",
-    opts = {
-      ensure_installed = {
-        "rust",
-      },
-      width = function(_, cols, _)
-      if cols > 200 then
-      return 170
-      else
-      return math.floor(cols * 0.87)
-        end
-      end,
-    }
-  },
-
-  {
     "neovim/nvim-lspconfig",
     dependencies = {
-      "jose-elias-alvarez/null-ls.nvim",
       "williamboman/mason-lspconfig.nvim",
-      "williamboman/mason.nvim"
+      "williamboman/mason.nvim",
     },
-    config = function ()
+    config = function()
       require "plugins.configs.lspconfig"
       require "custom.configs.lspconfig"
     end,
   },
 
   {
-    "jose-elias-alvarez/null-ls.nvim",
-    config = function ()
-      require("null-ls").setup()
-    end
+    "nvim-treesitter/nvim-treesitter",
+    opts = {
+      ensure_installed = {
+        "rust",
+      },
+      width = function(_, cols, _)
+        if cols > 200 then
+          return 170
+        else
+          return math.floor(cols * 0.87)
+        end
+      end,
+    },
+  },
+
+  {
+    "nvimtools/none-ls.nvim",
+    ft = { "go", "typescript", "javascript", "lua", "sh", "yaml", "sql" },
+    event = "VeryLazy",
+    opts = function()
+      return require "custom.configs.null-ls"
+    end,
   },
 
   {
     "pmizio/typescript-tools.nvim",
     dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
-    ft = "typescript",
-    opts = function ()
-      return require "custom.configs.typescript-tools"
+    config = function()
+      require("typescript-tools").setup {}
     end,
-    config = function (_, opts)
-      require('typescript-tools').setup(opts)
-    end
-  },
-
-  {
-    "sbdchd/neoformat",
-    ft = "typescript",
   },
 
   {
     "rust-lang/rust.vim",
     ft = "rust",
-    init = function ()
+    init = function()
       vim.g.rustfmt_autosave = 1
     end,
   },
@@ -81,14 +83,17 @@ local plugins = {
   {
     "simrat39/rust-tools.nvim",
     ft = "rust",
-    dependencies = {"neovim/nvim-lspconfig"},
-    config = function ()
-      require('rust-tools').setup()
+    dependencies = { "neovim/nvim-lspconfig" },
+    opts = function()
+      return require "custom.configs.rust-tools"
+    end,
+    config = function(_, opts)
+      require("rust-tools").setup(opts)
     end,
   },
 
   {
-    'rvmelkonian/move.vim',
+    "rvmelkonian/move.vim",
     dependencies = { "neovim/nvim-lspconfig" },
     ft = "move",
   },
@@ -96,7 +101,7 @@ local plugins = {
   {
     "nvim-treesitter/nvim-treesitter",
     opts = {
-        ensure_installed = {
+      ensure_installed = {
         "vim",
         "lua",
         "typescript",
@@ -106,25 +111,9 @@ local plugins = {
   },
 
   {
-    'ray-x/guihua.lua',
-    run = 'cd lua/fzy && make'
-  },
-
-  {
-   "ray-x/navigator.lua",
-    dependencies = {
-      "neovim/nvim-lspconfig",
-      'ray-x/guihua.lua'
-    },
-    config = function (_, opts)
-      require('navigator').setup(opts)
-    end
-  },
-
-  {
-    'z0mbix/vim-shfmt',
-    ft = 'sh',
-    init = function ()
+    "z0mbix/vim-shfmt",
+    ft = "sh",
+    init = function()
       vim.g.shfmt_fmt_on_save = 1
     end,
   },
@@ -137,54 +126,78 @@ local plugins = {
   {
     "zbirenbaum/copilot.lua",
     cmd = "Copilot",
-    -- event = "InsertEnter",
-    config = function()
-      require("copilot").setup({})
+    event = "InsertEnter",
+    opts = require "custom.configs.copilot",
+    config = function(opts)
+      require("copilot").setup(opts)
     end,
   },
 
   {
     "zbirenbaum/copilot-cmp",
     dependencies = {
-      "zbirenbaum/copilot.lua"
+      "zbirenbaum/copilot.lua",
     },
     lazy = false,
-    opts = overrides.copilot,
     config = function()
-      require("copilot_cmp").setup()
+      require("copilot_cmp").setup {}
     end,
   },
 
   {
     "hrsh7th/nvim-cmp",
     dependencies = {
-      {"zbirenbaum/copilot-cmp"},
+      { "zbirenbaum/copilot-cmp" },
     },
     after = { "copilot-cmp" },
     opts = {
       sources = {
-        { name = "copilot",  group_index = 2 },
+        { name = "copilot", group_index = 2 },
         { name = "nvim_lsp", group_index = 2 },
-        { name = "luasnip",  group_index = 2 },
-        { name = "buffer",   group_index = 2 },
+        { name = "luasnip", group_index = 2 },
+        { name = "buffer", group_index = 2 },
         { name = "nvim_lua", group_index = 2 },
-        { name = "path",     group_index = 2 },
+        { name = "path", group_index = 2 },
       },
     },
   },
 
   {
     "cuducos/yaml.nvim",
-    ft = {"yaml"},
-    config = function ()
-      require("yaml").setup()
-    end
+    ft = { "yaml" },
   },
 
   {
     "qiuxiang/solidity-ls",
-    ft = {"solidity"}
+    ft = { "solidity" },
+  },
+
+  {
+    "mfussenegger/nvim-dap",
+    config = function()
+      require "custom.configs.dap"
+      require("core.utils").load_mappings "dap"
+    end,
+  },
+
+  {
+    "rcarriga/nvim-dap-ui",
+    event = "VeryLazy",
+    dependencies = "mfussenegger/nvim-dap",
+    config = function()
+      local dap = require "dap"
+      local dapui = require "dapui"
+      require("dapui").setup()
+      dap.listeners.after.event_initialized["dapui_config"] = function()
+        dapui.open()
+      end
+      dap.listeners.before.event_terminated["dapui_config"] = function()
+        dapui.close()
+      end
+      dap.listeners.before.event_exited["dapui_config"] = function()
+        dapui.close()
+      end
+    end,
   },
 }
 return plugins
-
