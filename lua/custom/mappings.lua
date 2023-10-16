@@ -23,6 +23,30 @@ M.dap = {
       "<cmd> DapContinue<CR>",
       "Run or continue the debugger",
     },
+    ["<F5>"] = {
+      "<cmd>lua require 'dap'.continue()<CR>",
+      "Continue execution",
+    },
+    ["<F10>"] = {
+      "<cmd>lua require 'dap'.step_over()<CR>",
+      "Step over",
+    },
+    ["<F11>"] = {
+      "<cmd>lua require 'dap'.step_into()<CR>",
+      "Step into",
+    },
+    ["<F12>"] = {
+      "<cmd>lua require 'dap'.step_out()<CR>",
+      "Step out",
+    },
+    ["<leader>b"] = {
+      "<cmd>lua require 'dap'.toggle_breakpoint()<CR>",
+      "Toggle breakpoint",
+    },
+    ["<leader>B"] = {
+      "<cmd>lua require 'dap'.set_breakpoint(vim.fn.input('Breakpoint condition: '))<CR>",
+      "Set breakpoint with condition",
+    },
   },
 }
 return M

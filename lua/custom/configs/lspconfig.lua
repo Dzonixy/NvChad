@@ -15,7 +15,7 @@ end
 lspconfig.tsserver.setup {
   on_attach = on_attach,
   capabilities = capabilities,
-  filetypes = { "typescript, javascript" },
+  filetypes = { "typescript", "javascript", "typescriptreact", "javascriptreact" },
   init_options = {
     disableSuggestions = true,
   },

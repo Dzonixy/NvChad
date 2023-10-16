@@ -57,7 +57,17 @@ local plugins = {
 
   {
     "nvimtools/none-ls.nvim",
-    ft = { "go", "typescript", "javascript", "lua", "sh", "yaml", "sql" },
+    ft = {
+      "go",
+      "typescript",
+      "typescriptreact",
+      "javascript",
+      "javascriptreact",
+      "lua",
+      "sh",
+      "yaml",
+      "sql",
+    },
     event = "VeryLazy",
     opts = function()
       return require "custom.configs.null-ls"
@@ -174,6 +184,13 @@ local plugins = {
 
   {
     "mfussenegger/nvim-dap",
+    dependencies = {
+      {
+        "microsoft/vscode-js-debug",
+        opt = true,
+        run = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
+      },
+    },
     config = function()
       require "custom.configs.dap"
       require("core.utils").load_mappings "dap"
@@ -181,8 +198,8 @@ local plugins = {
   },
 
   {
-    "rcarriga/nvim-dap-ui",
     event = "VeryLazy",
+    "rcarriga/nvim-dap-ui",
     dependencies = "mfussenegger/nvim-dap",
     config = function()
       local dap = require "dap"
@@ -197,6 +214,21 @@ local plugins = {
       dap.listeners.before.event_exited["dapui_config"] = function()
         dapui.close()
       end
+    end,
+  },
+
+  -- { "folke/neodev.nvim", opts = {} },
+
+  {
+    "nvim-neorg/neorg",
+    ft = "norg",
+    run = ":Neorg sync-parsers", -- This is the important bit!
+    config = function()
+      require("neorg").setup {
+        load = {
+          ["core.defaults"] = {},
+        },
+      }
     end,
   },
 }
