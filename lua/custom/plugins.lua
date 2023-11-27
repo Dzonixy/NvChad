@@ -182,24 +182,43 @@ local plugins = {
     ft = { "solidity" },
   },
 
+  -- {
+  --   "mfussenegger/nvim-dap",
+  --   config = function()
+  --     require "custom.configs.dap"
+  --     require("core.utils").load_mappings "dap"
+  --   end,
+  -- },
+  --
+  -- {
+  --   event = "VeryLazy",
+  --   "rcarriga/nvim-dap-ui",
+  --   dependencies = { "mfussenegger/nvim-dap" },
+  --   config = function()
+  --     local dap = require "dap"
+  --     local dapui = require "dapui"
+  --     require("dapui").setup()
+  --     dap.listeners.after.event_initialized["dapui_config"] = function()
+  --       dapui.open()
+  --     end
+  --     dap.listeners.before.event_terminated["dapui_config"] = function()
+  --       dapui.close()
+  --     end
+  --     dap.listeners.before.event_exited["dapui_config"] = function()
+  --       dapui.close()
+  --     end
+  --   end,
+  -- },
+  --
+  -- {
+  --   "mxsdev/nvim-dap-vscode-js",
+  --   dependencies = { "mfussenegger/nvim-dap" },
+  --   opt = true,
+  --   run = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
+  -- },
   {
-    "mfussenegger/nvim-dap",
-    dependencies = {
-      {
-        "microsoft/vscode-js-debug",
-        opt = true,
-        run = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
-      },
-    },
-    config = function()
-      require "custom.configs.dap"
-      require("core.utils").load_mappings "dap"
-    end,
-  },
-
-  {
-    event = "VeryLazy",
     "rcarriga/nvim-dap-ui",
+    event = "VeryLazy",
     dependencies = "mfussenegger/nvim-dap",
     config = function()
       local dap = require "dap"
@@ -216,8 +235,22 @@ local plugins = {
       end
     end,
   },
-
-  -- { "folke/neodev.nvim", opts = {} },
+  {
+    "mfussenegger/nvim-dap",
+    lazy = true,
+    dependencies = {
+      "rcarriga/nvim-dap-ui",
+      {
+        "microsoft/vscode-js-debug",
+        version = "1.x",
+        build = "npm i && npm run compile vsDebugServerBundle && mv dist out",
+      },
+    },
+    config = function()
+      require "custom.configs.dap"
+      require("core.utils").load_mappings "dap"
+    end,
+  },
 
   {
     "nvim-neorg/neorg",
