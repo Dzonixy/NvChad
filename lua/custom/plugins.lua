@@ -182,40 +182,6 @@ local plugins = {
     ft = { "solidity" },
   },
 
-  -- {
-  --   "mfussenegger/nvim-dap",
-  --   config = function()
-  --     require "custom.configs.dap"
-  --     require("core.utils").load_mappings "dap"
-  --   end,
-  -- },
-  --
-  -- {
-  --   event = "VeryLazy",
-  --   "rcarriga/nvim-dap-ui",
-  --   dependencies = { "mfussenegger/nvim-dap" },
-  --   config = function()
-  --     local dap = require "dap"
-  --     local dapui = require "dapui"
-  --     require("dapui").setup()
-  --     dap.listeners.after.event_initialized["dapui_config"] = function()
-  --       dapui.open()
-  --     end
-  --     dap.listeners.before.event_terminated["dapui_config"] = function()
-  --       dapui.close()
-  --     end
-  --     dap.listeners.before.event_exited["dapui_config"] = function()
-  --       dapui.close()
-  --     end
-  --   end,
-  -- },
-  --
-  -- {
-  --   "mxsdev/nvim-dap-vscode-js",
-  --   dependencies = { "mfussenegger/nvim-dap" },
-  --   opt = true,
-  --   run = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
-  -- },
   {
     "rcarriga/nvim-dap-ui",
     event = "VeryLazy",
@@ -235,20 +201,44 @@ local plugins = {
       end
     end,
   },
+
   {
     "mfussenegger/nvim-dap",
     lazy = true,
     dependencies = {
+      "theHamsta/nvim-dap-virtual-text",
       "rcarriga/nvim-dap-ui",
       {
+        "mxsdev/nvim-dap-vscode-js",
+        config = function()
+          require("dap-vscode-js").setup {
+            debugger_path = vim.fn.resolve(vim.fn.stdpath "data" .. "/lazy/vscode-js-debug"),
+            adapters = { "chrome", "pwa-node", "pwa-chrome", "node-terminal", "node" },
+          }
+        end,
+      },
+      {
         "microsoft/vscode-js-debug",
-        version = "1.x",
-        build = "npm i && npm run compile vsDebugServerBundle && mv dist out",
+        build = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out",
       },
     },
     config = function()
       require "custom.configs.dap"
       require("core.utils").load_mappings "dap"
+    end,
+  },
+
+  {
+    "LiadOz/nvim-dap-repl-highlights",
+    config = true,
+    dependencies = {
+      "mfussenegger/nvim-dap",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    build = function()
+      if not require("nvim-treesitter.parsers").has_parser "dap_repl" then
+        vim.cmd ":TSInstall dap_repl"
+      end
     end,
   },
 
