@@ -189,7 +189,33 @@ local plugins = {
     config = function()
       local dap = require "dap"
       local dapui = require "dapui"
-      require("dapui").setup()
+      require("dapui").setup {
+        layouts = {
+          -- Elements on the left
+          {
+            elements = {
+              -- Add or remove elements as needed
+              "scopes",
+              "breakpoints",
+              "stacks",
+              "watches",
+            },
+            size = 0.25, -- This is the width of the left column in characters
+            position = "left",
+          },
+          -- Elements at the bottom
+          {
+            elements = {
+              -- Add or remove elements as needed
+              "repl",
+              "console",
+            },
+            size = 0.35, -- This is the height of the bottom section as a percentage of the total window
+            position = "bottom",
+          },
+          -- Additional sections can be added here if needed
+        },
+      }
       dap.listeners.after.event_initialized["dapui_config"] = function()
         dapui.open()
       end
@@ -253,6 +279,11 @@ local plugins = {
         },
       }
     end,
+  },
+
+  {
+    "tpope/vim-fugitive",
+    lazy = false,
   },
 }
 return plugins

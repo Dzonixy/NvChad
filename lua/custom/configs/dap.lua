@@ -31,8 +31,6 @@ for _, language in ipairs { "typescript", "javascript" } do
       cwd = "${workspaceFolder}",
       runtimeExecutable = "node",
       sourceMaps = true,
-      -- protocol = "inspector",
-      -- console = "integratedTerminal",
     },
     {
       type = "pwa-node",
