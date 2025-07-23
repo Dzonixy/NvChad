@@ -44,6 +44,16 @@ function M.config()
             prefix = "self",
           },
 
+          -- experimental settings
+          experimental = {
+            procAttrMacros = true,
+          },
+
+          cachePriming = {
+            enable = true,
+            numThreads = 10, -- Adjust based on your CPU
+          },
+
           -- Cargo settings
           cargo = {
             allFeatures = true,
@@ -70,10 +80,13 @@ function M.config()
           -- Proc macro settings
           procMacro = {
             enable = true,
+            attributes = {
+              enable = true,
+            },
             -- ignored = {
-            --   ["async-trait"] = { "async_trait" },
-            --   ["napi-derive"] = { "napi" },
-            --   ["async-recursion"] = { "async_recursion" },
+            -- ["async-trait"] = { "async_trait" },
+            -- ["napi-derive"] = { "napi" },
+            -- ["async-recursion"] = { "async_recursion" },
             -- },
           },
 
@@ -111,12 +124,26 @@ function M.config()
             },
           },
 
+          completion = {
+            addCallArgumentSnippets = true,
+            addCallParenthesis = true,
+            postfix = {
+              enable = true,
+            },
+            autoimport = {
+              enable = true,
+            },
+          },
+
           -- Workspace settings
           workspace = {
             symbol = {
               search = {
                 scope = "workspace",
               },
+            },
+            discoverConfig = {
+              command = { "cargo", "metadata", "--no-deps", "--format-version", "1" },
             },
           },
 
@@ -134,11 +161,51 @@ function M.config()
               ".venv",
             },
           },
+
+          assist = {
+            importGranularity = "module",
+            importPrefix = "self",
+            importGroup = true,
+            allowMergingIntoGlobImports = true,
+            -- Add this
+            expressionFillDefault = "todo",
+          },
+
+          -- Add hover settings
+          hover = {
+            documentation = {
+              enable = true,
+            },
+            links = {
+              enable = true,
+            },
+          },
+
+          -- Add this to help with trait resolution
+          typing = {
+            autoClosingAngleBrackets = {
+              enable = true,
+            },
+          },
+
+          -- Add explicit type checking
+          check = {
+            invocationLocation = "workspace",
+            invocationStrategy = "per_workspace",
+            overrideCommand = nil,
+            allTargets = true,
+            noDefaultFeatures = false,
+            features = "all",
+            extraArgs = {},
+          },
         },
       },
 
       -- on_attach function
       on_attach = function(client, bufnr)
+        vim.defer_fn(function()
+          vim.cmd.RustLsp { "reloadWorkspace" }
+        end, 500)
         -- Set up buffer-local keymaps here
         local map = function(mode, lhs, rhs, desc)
           vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })

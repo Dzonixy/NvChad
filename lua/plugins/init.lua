@@ -41,12 +41,6 @@ return {
   },
 
   {
-    "zapling/mason-conform.nvim",
-    event = "VeryLazy",
-    dependencies = { "conform.nvim" },
-  },
-
-  {
     "williamboman/mason-lspconfig.nvim",
     event = "VeryLazy",
     dependencies = { "nvim-lspconfig", { "mason-org/mason.nvim", opts = {} } },
@@ -367,9 +361,7 @@ return {
     end,
   },
 
-  -- {
-  --   "echasnovski/mini.icons",
-  -- },
+  { "nvim-tree/nvim-web-devicons" },
 
   {
     "theHamsta/nvim-dap-virtual-text",
