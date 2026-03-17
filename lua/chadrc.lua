@@ -48,6 +48,7 @@ M.nvdash = {
   },
 }
 
+M.mason = { pkgs = {}, skip = {} }
 M.lsp = { signature = true }
 
 M.colorify = {
