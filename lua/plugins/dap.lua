@@ -31,7 +31,12 @@ return {
       {
         "<leader>da",
         function()
-          require("dap").continue()
+          local args = vim.fn.input "Arguments: "
+          local arg_list = vim.split(args, " ", { trimempty = true })
+          require("dap").continue { before = function(config)
+            config.args = arg_list
+            return config
+          end }
         end,
         desc = "Run with Args",
       },
@@ -161,7 +166,16 @@ return {
 
   {
     "theHamsta/nvim-dap-virtual-text",
-    opts = {},
+    dependencies = { "mfussenegger/nvim-dap" },
+    opts = {
+      enabled = true,
+      enabled_commands = true,
+      highlight_changed_variables = true,
+      highlight_new_as_changed = false,
+      show_stop_reason = true,
+      commented = false,
+      virt_text_pos = "eol",
+    },
   },
 
   {
@@ -174,6 +188,6 @@ return {
 
   {
     "leoluz/nvim-dap-go",
-    opts = {},
+    -- setup called in configs/dap.lua after mason-nvim-dap
   },
 }
