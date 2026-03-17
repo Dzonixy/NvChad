@@ -9,6 +9,8 @@ local ensure_installed = {
   "yamlls",
   "sqls",
   "bashls",
+  "clangd",
+  "cmake",
 }
 
 require("mason-lspconfig").setup {

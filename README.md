@@ -47,6 +47,8 @@ First launch will auto-install:
 | **JSON** | jsonls (with SchemaStore) | prettier | - | json, jsonc |
 | **YAML** | yamlls (with SchemaStore) | prettier | - | yaml |
 | **SQL** | sqls | sql_formatter | - | sql |
+| **C/C++** | clangd (clang-tidy, IWYU) | clang-format | codelldb | c, cpp, doxygen |
+| **CMake** | cmake-language-server | cmake_format | - | cmake, make |
 | **Bash** | bashls | shfmt | - | bash |
 | **Lua** | lua_ls | stylua | - | lua, luadoc |
 | **HTML/CSS** | html, cssls | prettier | - | html, css |

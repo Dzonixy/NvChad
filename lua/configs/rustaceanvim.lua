@@ -269,12 +269,15 @@ function M.config()
     vim.cmd "RustAnalyzer start"
   end, { desc = "Restart Rust Analyzer" })
 
-  -- Reload workspace on Cargo.toml save
+  -- Reload workspace on Cargo.toml save (only if rust-analyzer is running)
   vim.api.nvim_create_autocmd("BufWritePost", {
     group = vim.api.nvim_create_augroup("RustaceanvimConfig", { clear = true }),
     pattern = "Cargo.toml",
     callback = function()
-      vim.cmd.RustLsp { "reloadWorkspace" }
+      local clients = vim.lsp.get_clients { name = "rust-analyzer" }
+      if #clients > 0 then
+        vim.cmd.RustLsp { "reloadWorkspace" }
+      end
     end,
   })
 end

@@ -18,6 +18,12 @@ local options = {
     sh = { "shfmt" },
     bash = { "shfmt" },
     zsh = { "shfmt" },
+    c = { "clang-format" },
+    cpp = { "clang-format" },
+    objc = { "clang-format" },
+    cuda = { "clang-format" },
+    proto = { "clang-format" },
+    cmake = { "cmake_format", lsp_format = "fallback" },
   },
 
   formatters = {

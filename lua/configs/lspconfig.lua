@@ -1,6 +1,6 @@
 require("nvchad.configs.lspconfig").defaults()
 
-local servers = { "html", "cssls", "ts_ls", "gopls", "lua_ls", "taplo", "jsonls", "yamlls", "sqls", "bashls" }
+local servers = { "html", "cssls", "ts_ls", "gopls", "lua_ls", "taplo", "jsonls", "yamlls", "sqls", "bashls", "clangd", "cmake" }
 vim.lsp.enable(servers)
 
 vim.lsp.config('lua_ls', {
@@ -124,6 +124,48 @@ vim.lsp.config('bashls', {
     bashIde = {
       globPattern = "*@(.sh|.inc|.bash|.command)",
     },
+  },
+})
+
+vim.lsp.config('clangd', {
+  cmd = {
+    "clangd",
+    "--background-index",
+    "--clang-tidy",
+    "--header-insertion=iwyu",
+    "--completion-style=detailed",
+    "--function-arg-placeholders",
+    "--fallback-style=llvm",
+    "--all-scopes-completion",
+    "--pch-storage=memory",
+  },
+  filetypes = { "c", "cpp", "objc", "objcpp", "cuda", "proto" },
+  root_markers = {
+    ".clangd",
+    ".clang-tidy",
+    ".clang-format",
+    "compile_commands.json",
+    "compile_flags.txt",
+    "configure.ac",
+    "Makefile",
+    "CMakeLists.txt",
+    ".git",
+  },
+  capabilities = {
+    offsetEncoding = { "utf-16" },
+  },
+  init_options = {
+    usePlaceholders = true,
+    completeUnimported = true,
+    clangdFileStatus = true,
+  },
+})
+
+vim.lsp.config('cmake', {
+  filetypes = { "cmake" },
+  root_markers = { "CMakeLists.txt", "cmake", ".git" },
+  init_options = {
+    buildDirectory = "build",
   },
 })
 

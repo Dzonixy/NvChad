@@ -138,6 +138,48 @@ function M.setup()
     }
   end
 
+  -- C/C++ configurations (uses codelldb, same adapter as Rust)
+  for _, language in ipairs { "c", "cpp" } do
+    dap.configurations[language] = {
+      {
+        name = "Launch executable",
+        type = "codelldb",
+        request = "launch",
+        program = function()
+          return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+        end,
+        cwd = "${workspaceFolder}",
+        stopOnEntry = false,
+        args = function()
+          local input = vim.fn.input "Arguments: "
+          return vim.split(input, " ", { trimempty = true })
+        end,
+      },
+      {
+        name = "Launch executable (with build)",
+        type = "codelldb",
+        request = "launch",
+        program = function()
+          -- Build first, then ask for executable
+          local build_cmd = vim.fn.input("Build command (empty to skip): ", "make")
+          if build_cmd ~= "" then
+            vim.fn.system(build_cmd)
+          end
+          return vim.fn.input("Path to executable: ", vim.fn.getcwd() .. "/", "file")
+        end,
+        cwd = "${workspaceFolder}",
+        stopOnEntry = false,
+      },
+      {
+        name = "Attach to process",
+        type = "codelldb",
+        request = "attach",
+        pid = require("dap.utils").pick_process,
+        cwd = "${workspaceFolder}",
+      },
+    }
+  end
+
   -- Go configurations are handled by dap-go
   require("dap-go").setup()
 end

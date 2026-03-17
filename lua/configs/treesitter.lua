@@ -25,6 +25,11 @@ local options = {
     "tsx",
     "html",
     "css",
+    "c",
+    "cpp",
+    "cmake",
+    "make",
+    "doxygen",
   },
 
   highlight = {
