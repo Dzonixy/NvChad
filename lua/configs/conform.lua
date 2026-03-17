@@ -1,16 +1,23 @@
 local options = {
   formatters_by_ft = {
     lua = { "stylua" },
-    go = { "gofumpt", "goimports-reviser", "golines", "goimports" },
+    go = { "gofumpt", "goimports-reviser", "golines" },
     css = { "prettier" },
     html = { "prettier" },
     javascript = { "prettier" },
     typescript = { "prettier" },
     javascriptreact = { "prettier" },
     typescriptreact = { "prettier" },
-    json = { "prettier" },
-    yaml = { "prettier" },
+    json = { "prettier", lsp_format = "fallback" },
+    yaml = { "prettier", lsp_format = "fallback" },
     markdown = { "prettier" },
+    rust = { "rustfmt", lsp_format = "fallback" },
+    toml = { "taplo" },
+    sql = { "sql_formatter" },
+    jsonc = { "prettier" },
+    sh = { "shfmt" },
+    bash = { "shfmt" },
+    zsh = { "shfmt" },
   },
 
   formatters = {
@@ -24,8 +31,8 @@ local options = {
 
   format_on_save = {
     -- These options will be passed to conform.format()
-    timeout_ms = 500,
-    lsp_fallback = true,
+    timeout_ms = 3000,
+    lsp_format = "fallback",
   },
 }
 

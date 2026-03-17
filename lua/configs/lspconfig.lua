@@ -1,11 +1,9 @@
 require("nvchad.configs.lspconfig").defaults()
 
-local servers = { "html", "cssls", "ts_ls", "gopls", "lua_ls" }
+local servers = { "html", "cssls", "ts_ls", "gopls", "lua_ls", "taplo", "jsonls", "yamlls", "sqls", "bashls" }
 vim.lsp.enable(servers)
 
-local lspconfig = require "lspconfig"
-
-lspconfig.lua_ls.setup {
+vim.lsp.config('lua_ls', {
   settings = {
     Lua = {
       diagnostics = {
@@ -24,28 +22,12 @@ lspconfig.lua_ls.setup {
       },
     },
   },
-}
+})
 
-lspconfig.gopls.setup {
-  on_attach = function(client, _)
-    if not client.server_capabilities.semanticTokensProvider then
-      local semantic = client.config.capabilities.textDocument.semanticTokens
-      client.server_capabilities.semanticTokensProvider = {
-        full = true,
-        legend = {
-          tokenTypes = semantic.tokenTypes,
-          tokenModifiers = semantic.tokenModifiers,
-        },
-        range = true,
-        nalyses = {
-          unusedparams = true,
-        },
-      }
-    end
-  end,
+vim.lsp.config('gopls', {
   cmd = { "gopls" },
   filetypes = { "go", "gomod", "gotmpl", "gowork" },
-  root_dir = lspconfig.util.root_pattern("go.work", "go.mod", ".git"),
+  root_markers = { "go.work", "go.mod", ".git" },
   settings = {
     gopls = {
       gofumpt = true,
@@ -81,8 +63,67 @@ lspconfig.gopls.setup {
       semanticTokens = true,
     },
   },
-}
+})
 
-lspconfig.ts_ls.setup {
+vim.lsp.config('ts_ls', {
   filetypes = { "typescript", "javascript", "typescriptreact", "javascriptreact" },
-}
+})
+
+vim.lsp.config('taplo', {
+  filetypes = { "toml" },
+  root_markers = { ".git", "Cargo.toml" },
+  settings = {
+    taplo = {
+      formatting = {
+        alignEntries = false,
+        arrayAutoCollapse = true,
+        arrayAutoExpand = true,
+        arrayTrailingComma = true,
+        columnWidth = 80,
+        reorderKeys = true,
+      },
+    },
+  },
+})
+
+vim.lsp.config('jsonls', {
+  filetypes = { "json", "jsonc" },
+  settings = {
+    json = {
+      validate = { enable = true },
+      schemas = require("configs.json-schemas").schemas(),
+    },
+  },
+})
+
+vim.lsp.config('yamlls', {
+  filetypes = { "yaml", "yaml.docker-compose", "yaml.gitlab" },
+  settings = {
+    yaml = {
+      validate = true,
+      schemaStore = {
+        enable = true,
+        url = "https://www.schemastore.org/api/json/catalog.json",
+      },
+      schemas = {},
+      format = { enable = false }, -- conform handles formatting
+      hover = true,
+      completion = true,
+    },
+  },
+})
+
+vim.lsp.config('sqls', {
+  filetypes = { "sql", "mysql", "plsql" },
+  root_markers = { ".git" },
+})
+
+vim.lsp.config('bashls', {
+  filetypes = { "sh", "bash", "zsh" },
+  settings = {
+    bashIde = {
+      globPattern = "*@(.sh|.inc|.bash|.command)",
+    },
+  },
+})
+

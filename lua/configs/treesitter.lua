@@ -5,6 +5,7 @@ local options = {
     "lua",
     "luadoc",
     "markdown",
+    "markdown_inline",
     "printf",
     "toml",
     "vim",
@@ -17,6 +18,13 @@ local options = {
     "gowork",
     "typescript",
     "rust",
+    "json",
+    "jsonc",
+    "sql",
+    "javascript",
+    "tsx",
+    "html",
+    "css",
   },
 
   highlight = {

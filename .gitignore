@@ -1,0 +1,14 @@
+# Plugin manager (auto-installed on first launch)
+plugin/
+
+# Swap/backup/undo files
+*.swp
+*.swo
+*~
+.netrwhist
+
+# Compiled Lua bytecache
+luac.out
+
+# Spell files (auto-downloaded)
+spell/
