@@ -69,7 +69,15 @@ lua/
 │   ├── rustaceanvim.lua  # Rust tooling
 │   ├── telescope.lua     # Telescope + Trouble integration
 │   ├── treesitter.lua    # Syntax highlighting
-│   └── trouble.lua       # Diagnostics/references viewer
+│   ├── trouble.lua       # Diagnostics/references viewer
+│   ├── todo-comments.lua # TODO/FIXME/HACK highlighting
+│   ├── crates.lua        # Cargo.toml crate management
+│   ├── surround.lua      # Add/change/delete surroundings
+│   ├── flash.lua         # Fast cursor movement
+│   ├── ts-autotag.lua    # Auto close/rename HTML/JSX tags
+│   ├── diffview.lua      # Git diff viewer
+│   ├── harpoon.lua       # Quick file bookmarks
+│   └── render-markdown.lua # Pretty markdown rendering
 ├── configs/              # Plugin configuration
 │   ├── conform.lua       # Formatters by filetype
 │   ├── copilot.lua       # Copilot settings
@@ -147,6 +155,46 @@ lua/
 | `<leader>cb` | Open CopilotChat |
 | `<leader>ce` | Explain code |
 | `<leader>cf` | Fix code |
+
+### Navigation
+| Key | Action |
+|-----|--------|
+| `s` | Flash jump |
+| `S` | Flash treesitter select |
+| `<leader>ha` | Harpoon add file |
+| `<leader>hh` | Harpoon menu |
+| `<leader>1-4` | Harpoon file 1-4 |
+| `<leader>hn` / `<leader>hp` | Harpoon next/prev |
+
+### Git
+| Key | Action |
+|-----|--------|
+| `<leader>gd` | Git diff (Diffview) |
+| `<leader>gh` | File history |
+| `<leader>gH` | Branch history |
+| `<leader>gq` | Close Diffview |
+
+### TODO Comments
+| Key | Action |
+|-----|--------|
+| `<leader>tT` | TODOs in Trouble |
+| `<leader>ft` | Find TODOs (Telescope) |
+| `]T` / `[T` | Next/prev TODO |
+
+### Crates (in Cargo.toml)
+| Key | Action |
+|-----|--------|
+| `<leader>ci` | Crate info |
+| `<leader>cv` | Crate versions |
+| `<leader>cu` | Update all crates |
+| `<leader>cU` | Update crate under cursor |
+
+### Surround
+| Key | Action |
+|-----|--------|
+| `ys{motion}{char}` | Add surrounding |
+| `cs{old}{new}` | Change surrounding |
+| `ds{char}` | Delete surrounding |
 
 ### Telescope
 | Key | Action |
