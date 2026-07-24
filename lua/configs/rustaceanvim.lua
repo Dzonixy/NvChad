@@ -1,5 +1,9 @@
 local M = {}
 
+-- Remember which toolchains we've already warned about, so the fix message in
+-- `server.cmd` below is shown once per toolchain per session, not on every buffer.
+local ra_notified = {}
+
 function M.config()
   vim.g.rustaceanvim = {
     tools = {
@@ -18,15 +22,51 @@ function M.config()
     },
 
     server = {
-      -- Use rustup's rust-analyzer (matches your active toolchain)
+      -- Use rustup's rust-analyzer so it matches whatever toolchain the project
+      -- pins via rust-toolchain.toml. Common failure: that toolchain has no
+      -- rust-analyzer component, so `rustup which` fails and the LSP silently
+      -- never starts. Detect that and print exactly how to fix it.
       cmd = function()
-        local ra = vim.fn.system({ "rustup", "which", "rust-analyzer" })
-        ra = vim.trim(ra)
-        if vim.v.shell_error ~= 0 or ra == "" then
-          -- Fallback to PATH if rustup fails
-          return { "rust-analyzer" }
+        local ra = vim.trim(vim.fn.system({ "rustup", "which", "rust-analyzer" }))
+        if vim.v.shell_error == 0 and ra ~= "" then
+          return { ra }
         end
-        return { ra }
+
+        -- Which toolchain did rustup resolve here? (honors the override)
+        local tc = vim.trim(vim.fn.system({ "rustup", "show", "active-toolchain" }))
+        tc = tc:match("^(%S+)") or ""
+
+        local key = tc ~= "" and tc or "?"
+        if not ra_notified[key] then
+          ra_notified[key] = true
+          local msg
+          if tc ~= "" then
+            msg = table.concat({
+              "rust-analyzer is not installed for the toolchain this project uses:",
+              "    " .. tc,
+              "",
+              "rustup honors the project's rust-toolchain.toml, and no rust-analyzer",
+              "component exists for that toolchain — so the LSP cannot start.",
+              "",
+              "Fix it:",
+              "    rustup component add rust-analyzer --toolchain " .. tc,
+              "",
+              "Then restart the server:  :RustAnalyzer start   (or <leader>rC)",
+            }, "\n")
+          else
+            msg = table.concat({
+              "rust-analyzer could not be resolved via rustup (is rustup on PATH?).",
+              "",
+              "Inspect the toolchain:  rustup show",
+              "Install RA for it:      rustup component add rust-analyzer --toolchain <toolchain>",
+            }, "\n")
+          end
+          vim.notify(msg, vim.log.levels.ERROR, { title = "rustaceanvim: rust-analyzer unavailable" })
+        end
+
+        -- Last resort: a rust-analyzer on PATH. Usually the same rustup proxy
+        -- (fails identically), but a standalone binary would work here.
+        return { "rust-analyzer" }
       end,
 
       standalone = true,

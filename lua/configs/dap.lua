@@ -38,6 +38,19 @@ function M.setup()
     },
   }
 
+  -- mason-nvim-dap's automatic codelldb setup leaves the adapter command empty on
+  -- the current mason.nvim (it can't resolve the package path), which silently
+  -- breaks Rust and C/C++ debugging (both use type = "codelldb"). Point the
+  -- adapter at the installed binary explicitly.
+  dap.adapters.codelldb = {
+    type = "server",
+    port = "${port}",
+    executable = {
+      command = vim.fn.stdpath "data" .. "/mason/bin/codelldb",
+      args = { "--port", "${port}" },
+    },
+  }
+
   -- Additional adapter configurations
   dap.adapters["pwa-node"] = {
     type = "server",

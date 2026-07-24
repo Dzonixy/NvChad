@@ -31,5 +31,7 @@ o.undofile = true
 vim.diagnostic.config {
   float = { border = "rounded" },
 }
-vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
-vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = "rounded" })
+-- Neovim 0.11+ native default border for every floating window (LSP hover,
+-- signature help, completion docs, etc.). Replaces the old
+-- vim.lsp.handlers + vim.lsp.with() wrapping, which 0.12 removed.
+vim.o.winborder = "rounded"

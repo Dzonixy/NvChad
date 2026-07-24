@@ -1,6 +1,6 @@
 return {
   "mrcjkb/rustaceanvim",
-  version = "^8",
+  version = "^9", -- v9 requires Neovim 0.12 (v8 was the last 0.11-compatible line)
   lazy = false, -- plugin is already lazy by design (uses ftplugin)
   dependencies = {
     "mfussenegger/nvim-dap",
